@@ -1,0 +1,73 @@
+name: Build container
+
+on:
+  workflow_dispatch: # build on demand
+  release:
+    types: [published] # build on release
+  schedule:
+    - cron: '45 4 * * 3' # 4:45am on Wednesday UTC
+
+jobs:
+  build-jekyll:
+    runs-on: ubuntu-latest # use the GitHub hosted runners
+    permissions:
+      packages: write # for uploading the finished container
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      id-token: write # to complete the identity challenge with sigstore/fulcio when running outside of PRs
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: some-natalie/jekyll-in-a-can:latest
+
+      - name: Scan it
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          image: "ghcr.io/some-natalie/jekyll-in-a-can:latest"
+          fail-build: false
+
+      - name: Upload Anchore scan report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+
+      - name: Get image digest
+        run: |
+          echo "IMAGE_DIGEST=$(docker inspect \
+          ghcr.io/some-natalie/jekyll-in-a-can:latest | \
+          jq -r '.[0].Id')" >> $GITHUB_ENV
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@main
+
+      - name: Log in to GHCR
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Sign the published Docker image
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: cosign sign -y ghcr.io/some-natalie/jekyll-in-a-can@${{ env.IMAGE_DIGEST }}
+
+      - name: Push the signed image
+        run: docker push ghcr.io/some-natalie/jekyll-in-a-can:latest
