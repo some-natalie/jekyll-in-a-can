@@ -1,7 +1,7 @@
 FROM cgr.dev/chainguard/ruby:latest-dev
 
 # Labels!
-LABEL org.opencontainers.image.source = "https://github.com/some-natalie/jekyll-in-a-can"
+LABEL org.opencontainers.image.source "https://github.com/some-natalie/jekyll-in-a-can"
 LABEL org.opencontainers.image.path "Dockerfile"
 LABEL org.opencontainers.image.title "Jekyll in a Can"
 LABEL org.opencontainers.image.description "Jekyll in a container for local static site development"
