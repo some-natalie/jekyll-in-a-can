@@ -38,4 +38,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: some-natalie/jekyll-in-a-can:latest
+          tags: ghcr.io/some-natalie/jekyll-in-a-can:latest
