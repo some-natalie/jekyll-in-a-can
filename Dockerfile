@@ -25,15 +25,17 @@ RUN yes | gem update --system
 RUN yes | gem install jekyll bundler
 RUN chown -R nonroot:nonroot /usr/local/vendor
 
-# Now switch back to the non-root user
-USER nonroot
-
 # Set the working directory
 WORKDIR /work
 
 # Copy in and set the entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Now switch back to the non-root user
+USER nonroot
+
+# Set the entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Expose ports
