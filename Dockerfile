@@ -1,7 +1,7 @@
 FROM cgr.dev/chainguard/ruby:latest-dev
 
 # Labels!
-LABEL org.opencontainers.image.source "https://github.com/some-natalie/jekyll-in-a-can"
+LABEL org.opencontainers.image.source https://github.com/some-natalie/jekyll-in-a-can
 LABEL org.opencontainers.image.path "Dockerfile"
 LABEL org.opencontainers.image.title "Jekyll in a Can"
 LABEL org.opencontainers.image.description "Jekyll in a container for local static site development"
@@ -21,8 +21,8 @@ ENV PATH=${GEM_HOME}/bin:${PATH}
 # Update gems
 USER root
 RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc
-RUN yes | gem update --system
-RUN yes | gem install jekyll bundler
+RUN yes | gem update --system && gem cleanup
+RUN yes | gem install jekyll bundler && gem cleanup
 RUN chown -R nonroot:nonroot /usr/local/vendor
 
 # Set the working directory
