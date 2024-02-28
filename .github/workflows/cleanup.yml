@@ -3,7 +3,7 @@ name: 🧹 Weekly repo cleanup
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 22 * * 1" # Weekly at 22:30 UTC on Mondays
+    - cron: '30 22 * * 1' # Weekly at 22:30 UTC on Mondays
 
 jobs:
   cleanup:
