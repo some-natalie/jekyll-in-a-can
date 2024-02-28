@@ -1,0 +1,32 @@
+name: 🧹 Weekly repo cleanup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 22 * * 1" # Weekly at 22:30 UTC on Mondays
+
+jobs:
+  cleanup:
+    name: Repo cleanup 🧹
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete untagged container images older than 2 months
+        uses: actions/delete-package-versions@v4
+        with: 
+          package-name: 'jekyll-in-a-can'
+          package-type: 'container'
+          min-versions-to-keep: 8
+          delete-only-untagged-versions: 'true'
+  stale:
+    name: Destalinate!
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close stale pull requests
+        uses: actions/stale@v9
+        with:
+          stale-pr-message: "This PR is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 2 weeks."
+          close-pr-message: "This PR was closed because it has been stalled for 2 weeks with no activity."
+          days-before-pr-stale: 30
+          days-before-pr-close: 14
+          stale-pr-label: "stale"
+          exempt-pr-labels: "dependencies"
