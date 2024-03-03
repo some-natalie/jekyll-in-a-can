@@ -10,10 +10,6 @@ LABEL org.opencontainers.image.licenses "MIT"
 LABEL org.opencontainers.image.documentation https://github.com/some-natalie/jekyll-in-a-can/README.md
 
 # Environment variable for system
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV TZ=America/Denver
-ENV LC_ALL=en_US.UTF-8
 ENV GEM_HOME=/usr/local/vendor
 ENV GEM_PATH=${GEM_PATH}:/usr/local/vendor
 ENV PATH=${GEM_HOME}/bin:${PATH}
@@ -28,14 +24,14 @@ RUN chown -R nonroot:nonroot /usr/local/vendor
 # Set the working directory
 WORKDIR /work
 
-# Copy in and set the entrypoint
+# Copy in the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Now switch back to the non-root user
 USER nonroot
 
-# Set the entrypoint
+# Set the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Expose ports
