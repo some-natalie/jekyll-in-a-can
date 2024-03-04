@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete untagged container images older than 2 months
-        uses: actions/delete-package-versions@v4
+        uses: actions/delete-package-versions@v5
         with: 
           package-name: 'jekyll-in-a-can'
           package-type: 'container'
