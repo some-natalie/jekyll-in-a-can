@@ -13,6 +13,7 @@ LABEL org.opencontainers.image.documentation https://github.com/some-natalie/jek
 ENV GEM_HOME=/usr/local/vendor
 ENV GEM_PATH=${GEM_PATH}:/usr/local/vendor
 ENV PATH=${GEM_HOME}/bin:${PATH}
+ENV LANG C.UTF-8
 
 # Update gems
 USER root
