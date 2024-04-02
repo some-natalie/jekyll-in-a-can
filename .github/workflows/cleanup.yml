@@ -15,6 +15,7 @@ jobs:
         with:
           package-name: "jekyll-in-a-can"
           package-type: "container"
+          min-versions-to-keep: 8
           delete-only-untagged-versions: "true"
           token: ${{ secrets.PACKAGES_CLEANUP }}
   stale:
