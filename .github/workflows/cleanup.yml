@@ -6,6 +6,7 @@ on:
     - cron: "30 22 * * 1" # Weekly at 22:30 UTC on Mondays
 
 jobs:
+
   cleanup:
     name: Repo cleanup 🧹
     runs-on: ubuntu-latest
@@ -18,6 +19,7 @@ jobs:
           min-versions-to-keep: 8
           delete-only-untagged-versions: "true"
           token: ${{ secrets.PACKAGES_CLEANUP }}
+
   stale:
     name: Destalinate!
     runs-on: ubuntu-latest
