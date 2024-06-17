@@ -46,6 +46,6 @@ jobs:
         uses: actions/attest-build-provenance@v1
         id: attest
         with:
-          subject-name: ghcr.io/some-natalie/jekyll-in-a-can:latest
+          subject-name: ghcr.io/some-natalie/jekyll-in-a-can
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
