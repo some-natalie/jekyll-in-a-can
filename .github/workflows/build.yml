@@ -5,7 +5,7 @@ on:
   release:
     types: [published] # build on release
   schedule:
-    - cron: '45 4 * * 3' # 4:45am on Wednesday UTC
+    - cron: "45 4 * * 3" # 4:45am on Wednesday UTC
 
 jobs:
   build-jekyll:
@@ -14,6 +14,7 @@ jobs:
       packages: write # for uploading the finished container
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
       id-token: write # to complete the identity challenge with sigstore/fulcio when running outside of PRs
+      attestations: write # to create the attestations for the container
 
     steps:
       - name: Checkout
@@ -33,9 +34,18 @@ jobs:
           registry: ghcr.io
 
       - name: Build and push
+        id: push
         uses: docker/build-push-action@v6
         with:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/some-natalie/jekyll-in-a-can:latest
+
+      - name: Attest the build
+        uses: actions/attest-build-provenance@v1
+        id: attest
+        with:
+          subject-name: ghcr.io/some-natalie/jekyll-in-a-can
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
