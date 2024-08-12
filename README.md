@@ -21,7 +21,7 @@ rm -rf Gemfile.lock _site .jekyll-cache
 
 ## notes
 
-it's rebuilt once a week automatically.  versions of gems, etc, are unpinned by default and will float to latest.  the base image is Chainguard's ruby development image's `latest` tag, which is rebuilt daily.
+it's rebuilt once a week automatically.  versions of gems, etc, are unpinned by default and will float to latest or whatever is in the gemfile.  the base image is Chainguard's ruby development image's `latest` tag, which is rebuilt daily.
 
 this isn't for production use, just local development of static sites.
 
