@@ -19,6 +19,8 @@ sometimes it's helpful to clear the previous build's stuff first, then run it
 rm -rf Gemfile.lock _site .jekyll-cache
 ```
 
+it needs to be in the same directory as your `Gemfile` in order to build the site.  it'll then run a local server for development.
+
 ## notes
 
 it's rebuilt once a week automatically.  versions of gems, etc, are unpinned by default and will float to latest or whatever is in the gemfile.  the base image is Chainguard's ruby development image's `latest` tag, which is rebuilt daily.
