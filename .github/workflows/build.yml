@@ -50,7 +50,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/some-natalie/jekyll-in-a-can:latest
-          annotations: ${{ steps.meta.outputs.annotations }}
+          annotations: ${{ steps.docker_meta.outputs.annotations }}
 
       - name: Attest the build
         uses: actions/attest-build-provenance@v1
