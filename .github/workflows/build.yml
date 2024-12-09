@@ -53,7 +53,7 @@ jobs:
           annotations: ${{ steps.docker_meta.outputs.annotations }}
 
       - name: Attest the build
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         id: attest
         with:
           subject-name: ghcr.io/some-natalie/jekyll-in-a-can
