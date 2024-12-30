@@ -13,13 +13,13 @@ LABEL org.opencontainers.image.documentation "https://github.com/some-natalie/je
 ENV GEM_HOME=/usr/local/vendor
 ENV GEM_PATH=${GEM_PATH}:/usr/local/vendor
 ENV PATH=${GEM_HOME}/bin:${PATH}
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 # Update gems
 USER root
 RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc
 RUN yes | gem update --system && gem cleanup
-RUN yes | gem install jekyll bundler && gem cleanup
+RUN yes | gem install jekyll bundler base64 csv && gem cleanup
 RUN chown -R nonroot:nonroot /usr/local/vendor
 
 # Set the working directory
