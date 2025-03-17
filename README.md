@@ -28,3 +28,6 @@ it's rebuilt once a week automatically.  versions of gems, etc, are unpinned by 
 this isn't for production use, just local development of static sites.
 
 images older than 2 months are deleted automatically.
+
+> [!NOTE]
+> [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/some-natalie/jekyll-in-a-can/badge)](https://securityscorecards.dev/viewer/?uri=github.com/some-natalie/jekyll-in-a-can) (more about this metric and what it means at [securityscorecards.dev](https://securityscorecards.dev/)) - track progress on anything surfaced by it [here](https://github.com/some-natalie/jekyll-in-a-can/issues)
