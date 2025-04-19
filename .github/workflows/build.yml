@@ -7,6 +7,9 @@ on:
   schedule:
     - cron: "45 4 * * 3" # 4:45am on Wednesday UTC
 
+permissions:
+  contents: read
+
 jobs:
   build-jekyll:
     runs-on: ubuntu-latest # use the GitHub hosted runners
