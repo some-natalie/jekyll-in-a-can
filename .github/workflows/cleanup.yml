@@ -5,12 +5,14 @@ on:
   schedule:
     - cron: "30 22 * * 1" # Weekly at 22:30 UTC on Mondays
 
+permissions:
+  contents: read
+
 jobs:
   cleanup:
     name: Repo cleanup 🧹
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       packages: write
     steps:
       - name: Delete untagged container images older than 2 months
@@ -25,7 +27,6 @@ jobs:
     name: Destalinate!
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       pull-requests: write
     steps:
       - name: Close stale pull requests
