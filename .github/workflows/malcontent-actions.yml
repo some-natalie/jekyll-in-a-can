@@ -33,7 +33,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Parse action repo and refs
+      - name: Extract old and new Action lines
+        shell: bash
+        run: |
+          OLD_LINE=$(grep '^-' pr.diff | grep 'uses:' | tail -1)
+          NEW_LINE=$(grep '^+' pr.diff | grep 'uses:' | tail -1)
+          echo "OLD_ACTION_LINE=$OLD_LINE" >> "$GITHUB_ENV"
+          echo "NEW_ACTION_LINE=$NEW_LINE" >> "$GITHUB_ENV"
+
+      - name: Parse Action repo and refs
         shell: bash
         run: |
           # Remove diff markers and whitespace, then extract repo and ref
