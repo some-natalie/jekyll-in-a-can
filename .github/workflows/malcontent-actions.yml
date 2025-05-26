@@ -100,7 +100,7 @@ jobs:
         run: |
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
-          if $type==docker; then
+          if [[ $type == docker ]]; then
             image=$(yq '.runs.image' action.yml)
             if [[ $image == "Dockerfile" ]]; then
               echo "This Action uses a Dockerfile, building it..."
@@ -135,7 +135,7 @@ jobs:
         run: |
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
-          if $type==docker; then
+          if [[ $type == docker ]]; then
             image=$(yq '.runs.image' action.yml)
             if [[ $image == "Dockerfile" ]]; then
               echo "This Action uses a Dockerfile, building it..."
