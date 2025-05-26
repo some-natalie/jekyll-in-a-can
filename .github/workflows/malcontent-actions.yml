@@ -204,9 +204,33 @@ jobs:
 
             const fileContent = fs.readFileSync(filePath, 'utf8');
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: fileContent,
+            # split the content into 65000 characters chunks, break on lines
+            # to avoid GitHub's comment size limit
+            const { context, github } = require('@actions/github');
+            if (fileContent.length > 65000) {
+              console.log(`Content is too long (${fileContent.length} characters), splitting into chunks.`);
+            } else {
+              console.log(`Content length is ${fileContent.length} characters, no need to split.`);
+            }
+            const chunks = [];
+            let currentChunk = '';
+            fileContent.split('\n').forEach(line => {
+              if (currentChunk.length + line.length + 1 > 65000) {
+                chunks.push(currentChunk);
+                currentChunk = line;
+              } else {
+                currentChunk += (currentChunk ? '\n' : '') + line;
+              }
             });
+            if (currentChunk) {
+              chunks.push(currentChunk);
+            }
+            console.log(`Total chunks: ${chunks.length}`);
+            for (const [index, chunk] of chunks.entries()) {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: context.issue.number,
+                body: `### Malcontent Analysis Results (Part ${index + 1}/${chunks.length})\n\n${chunk}`
+              });
+            }
+            console.log('Commented on the PR with Malcontent analysis results.');
