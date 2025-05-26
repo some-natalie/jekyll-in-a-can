@@ -94,6 +94,32 @@ jobs:
           path: "prior-commit"
           persist-credentials: false
 
+      - name: Setup original code
+        shell: bash
+        working-directory: ${{ github.workspace }}/prior-commit
+        run: |
+          # figure out type of Action
+          type=$(yq '.runs.using' action.yml)
+          if $type==docker; then
+            image=$(yq '.runs.image' action.yml)
+            if [[ $image == "Dockerfile" ]]; then
+              echo "This Action uses a Dockerfile, building it..."
+              docker build -t prior-action-image .
+              docker save prior-action-image -o prior-action-image.tar
+              untar -xf prior-action-image.tar
+            else
+              echo "This Action uses a pre-built Docker image: $image"
+              docker pull $image
+              docker save $image -o prior-action-image.tar
+              untar -xf prior-action-image.tar
+            fi
+          elif [[ $type == node* ]]; then
+            echo "This Action uses Node.js, installing dependencies..."
+            npm install
+          elif [[ $type == composite* ]]; then
+            echo "This is a composite Action, skipping build."
+          fi
+
       # look at current commit
       - name: Checkout the current code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -102,6 +128,32 @@ jobs:
           ref: ${{ needs.extract-action-repo.outputs.new_ref }}
           path: "current-commit"
           persist-credentials: false
+
+      - name: Setup new code
+        shell: bash
+        working-directory: ${{ github.workspace }}/current-commit
+        run: |
+          # figure out type of Action
+          type=$(yq '.runs.using' action.yml)
+          if $type==docker; then
+            image=$(yq '.runs.image' action.yml)
+            if [[ $image == "Dockerfile" ]]; then
+              echo "This Action uses a Dockerfile, building it..."
+              docker build -t prior-action-image .
+              docker save prior-action-image -o prior-action-image.tar
+              untar -xf prior-action-image.tar
+            else
+              echo "This Action uses a pre-built Docker image: $image"
+              docker pull $image
+              docker save $image -o prior-action-image.tar
+              untar -xf prior-action-image.tar
+            fi
+          elif [[ $type == node* ]]; then
+            echo "This Action uses Node.js, installing dependencies..."
+            npm install
+          elif [[ $type == composite* ]]; then
+            echo "This is a composite Action, skipping build."
+          fi
 
       - name: Analyze the files
         id: malcontent
@@ -113,7 +165,9 @@ jobs:
         shell: bash
         run: |
           if [ ! -s "malcontent-results.md" ]; then
-            echo "## malcontent detects no changes" > "malcontent-results.md"
+            echo "## malcontent detects no changes" >> "malcontent-results.md"
+            echo "" >> "malcontent-results.md"
+            echo "you may want to investigate manually" >> "malcontent-results.md"
           fi
 
       - name: Upload results
