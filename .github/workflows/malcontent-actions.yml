@@ -194,12 +194,12 @@ jobs:
             echo "you may want to investigate manually" >> "summary-results.md"
           else
             file="malcontent-results.json"
-            total-files=$(jq '[.Diff.Added,.Diff.Removed,.Diff.Modified] | map(keys | length) | add' $file)
-            total-changes=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[]] | map(.Behaviors | length) | add' $file)
-            critical=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "CRITICAL")] | length' $file)
-            high=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "HIGH")] | length'  $file)
-            medium=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "MEDIUM")] | length' $file)
-            other=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel != "CRITICAL" and .RiskLevel != "HIGH" and .RiskLevel != "MEDIUM")] | length' $file)
+            total-files=$(jq '[.Diff.Added,.Diff.Removed,.Diff.Modified] | map(keys | length) | add' "$file")
+            total-changes=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[]] | map(.Behaviors | length) | add' "$file")
+            critical=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "CRITICAL")] | length' "$file")
+            high=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "HIGH")] | length'  "$file")
+            medium=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel == "MEDIUM")] | length' "$file")
+            other=$(jq '[.Diff.Added[], .Diff.Removed[], .Diff.Modified[] | .Behaviors[] | select(.RiskLevel != "CRITICAL" and .RiskLevel != "HIGH" and .RiskLevel != "MEDIUM")] | length' "$file")
             echo "## Malcontent detected changes" >> "summary-results.md"
             echo "" >> "summary-results.md"
             echo "Total files changed: $total-files" >> "summary-results.md"
