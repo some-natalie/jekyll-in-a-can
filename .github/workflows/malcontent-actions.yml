@@ -65,10 +65,10 @@ jobs:
           NEW_REF="${NEW_USE##*@}"
           NEW_REF="${NEW_REF%%#*}" # Remove anything after a '#'
 
-          echo "old_action_repo=$OLD_ACTION_REPO"
-          echo "new_action_repo=$NEW_ACTION_REPO"
-          echo "old_ref=$OLD_REF"
-          echo "new_ref=$NEW_REF"
+          echo "old_action_repo=$OLD_ACTION_REPO" >> "$GITHUB_OUTPUT"
+          echo "new_action_repo=$NEW_ACTION_REPO" >> "$GITHUB_OUTPUT"
+          echo "old_ref=$OLD_REF" >> "$GITHUB_OUTPUT"
+          echo "new_ref=$NEW_REF" >> "$GITHUB_OUTPUT"
 
       - name: Show extracted variables
         shell: bash
