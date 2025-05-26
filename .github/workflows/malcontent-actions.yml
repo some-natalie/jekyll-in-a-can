@@ -60,6 +60,7 @@ jobs:
 
   malcontent:
     name: Malware analysis using malcontent
+    needs: extract-action-repo
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -85,6 +86,13 @@ jobs:
         shell: bash
         run: |
           docker run --rm -v ${{ github.workspace }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
+
+      - name: Add comment if results are empty
+        shell: bash
+        run: |
+          if [ ! -s "malcontent-results.md" ]; then
+            echo "## malcontent detects no changes" > "malcontent-results.md"
+          fi
 
       - name: Upload results
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
