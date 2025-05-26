@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Get PR diff
         shell: bash
@@ -72,6 +74,7 @@ jobs:
           repository: ${{ env.ACTION_REPO }}
           ref: ${{ env.OLD_REF }}
           path: "prior-commit"
+          persist-credentials: false
 
       # look at current commit
       - name: Checkout the current code
@@ -80,6 +83,7 @@ jobs:
           repository: ${{ env.ACTION_REPO }}
           ref: ${{ env.NEW_REF }}
           path: "current-commit"
+          persist-credentials: false
 
       - name: Analyze the files
         id: malcontent
