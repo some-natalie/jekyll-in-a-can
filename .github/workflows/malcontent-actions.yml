@@ -140,7 +140,7 @@ jobs:
         run: |
           # change to the Action directory if specified
           if [[ -n ${{ needs.extract-action-repo.outputs.old_action_dir }} ]]; then
-            cd ${{ needs.extract-action-repo.outputs.old_action_dir }}
+            cd ${{ needs.extract-action-repo.outputs.old_action_dir }} || true
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
@@ -179,7 +179,7 @@ jobs:
         run: |
           # change to the Action directory if specified
           if [[ -n ${{ needs.extract-action-repo.outputs.new_action_dir }} ]]; then
-            cd ${{ needs.extract-action-repo.outputs.new_action_dir }}
+            cd ${{ needs.extract-action-repo.outputs.new_action_dir }} || true
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
