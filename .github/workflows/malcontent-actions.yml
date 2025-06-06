@@ -139,8 +139,8 @@ jobs:
         working-directory: ${{ github.workspace }}/prior-commit
         run: |
           # change to the Action directory if specified
-          if [[ -n ${{ needs.extract-action-repo.outputs.old_action_dir }} ]]; then
-            cd ${{ needs.extract-action-repo.outputs.old_action_dir }} || true
+          if [[ -n "${{ needs.extract-action-repo.outputs.old_action_dir }}" ]]; then
+            cd "${{ needs.extract-action-repo.outputs.old_action_dir }}" || true
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
@@ -178,8 +178,8 @@ jobs:
         working-directory: ${{ github.workspace }}/current-commit
         run: |
           # change to the Action directory if specified
-          if [[ -n ${{ needs.extract-action-repo.outputs.new_action_dir }} ]]; then
-            cd ${{ needs.extract-action-repo.outputs.new_action_dir }} || true
+          if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
+            cd "${{ needs.extract-action-repo.outputs.new_action_dir }}" || true
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
