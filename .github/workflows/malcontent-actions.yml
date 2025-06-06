@@ -136,7 +136,7 @@ jobs:
 
       - name: Setup original code
         shell: bash
-        working-directory: ${{ runner.temp }}/prior-commit
+        working-directory: ${{ github.workspace }}/prior-commit
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.old_action_dir }}" ]]; then
@@ -175,7 +175,7 @@ jobs:
 
       - name: Setup new code
         shell: bash
-        working-directory: ${{ runner.temp }}/current-commit
+        working-directory: ${{ github.workspace }}/current-commit
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
@@ -207,7 +207,11 @@ jobs:
         id: malcontent
         shell: bash
         run: |
-          docker run --rm -v ${{ runner.temp }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
+          mkdir -p ${{ github.workspace }}/malcontent
+          mv prior-commit ${{ github.workspace }}/malcontent/prior-commit
+          mv current-commit ${{ github.workspace }}/malcontent/current-commit
+          chown -R 65532:65532 ${{ github.workspace }}/malcontent
+          docker run --rm -v ${{ github.workspace }}/malcontent:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
 
       - name: Add comment if results are empty
         shell: bash
