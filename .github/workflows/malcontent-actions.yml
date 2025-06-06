@@ -155,12 +155,12 @@ jobs:
               echo "This Action uses a Dockerfile, building it..."
               docker build -t prior-action-image .
               docker save prior-action-image -o prior-action-image.tar
-              tar -xzf prior-action-image.tar
+              tar -xf prior-action-image.tar
             else
               echo "This Action uses a pre-built Docker image: $image"
               docker pull $(echo $image | cut -d'/' -f3-)
               docker save $(echo $image | cut -d'/' -f3-) -o prior-action-image.tar
-              tar -xzf prior-action-image.tar
+              tar -xf prior-action-image.tar
             fi
           elif [[ $type == node* ]]; then
             echo "This Action uses Node.js, installing dependencies..."
@@ -199,12 +199,12 @@ jobs:
               echo "This Action uses a Dockerfile, building it..."
               docker build -t new-action-image .
               docker save new-action-image -o new-action-image.tar
-              tar -xzf new-action-image.tar
+              tar -xf new-action-image.tar
             else
               echo "This Action uses a pre-built Docker image: $image"
               docker pull $(echo $image | cut -d'/' -f3-)
               docker save $(echo $image | cut -d'/' -f3-) -o new-action-image.tar
-              tar -xzf new-action-image.tar
+              tar -xf new-action-image.tar
             fi
           elif [[ $type == node* ]]; then
             echo "This Action uses Node.js, installing dependencies..."
