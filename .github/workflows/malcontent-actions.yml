@@ -68,7 +68,9 @@ jobs:
             OLD_ACTION_DIR="${OLD_ACTION_DIR%@*}" # remove anything after the @
           else
             OLD_ACTION_ORG="${OLD_USE%%/*}"
-            OLD_ACTION_REPO="${OLD_USE%@*}"
+            OLD_ACTION_REPO="${OLD_USE#*/}"
+            OLD_ACTION_REPO="${OLD_ACTION_REPO%%/*}"
+            OLD_ACTION_REPO="${OLD_ACTION_REPO%@*}"
             OLD_ACTION_DIR=""
           fi
           OLD_REF="${OLD_USE##*@}"
@@ -87,7 +89,9 @@ jobs:
             NEW_ACTION_DIR="${NEW_ACTION_DIR%@*}" # remove anything after the @
           else
             NEW_ACTION_ORG="${NEW_USE%%/*}"
-            NEW_ACTION_REPO="${NEW_USE%@*}"
+            NEW_ACTION_REPO="${NEW_USE#*/}"
+            NEW_ACTION_REPO="${NEW_ACTION_REPO%%/*}"
+            NEW_ACTION_REPO="${NEW_ACTION_REPO%@*}"
             NEW_ACTION_DIR=""
           fi
           NEW_REF="${NEW_USE##*@}"
@@ -132,7 +136,7 @@ jobs:
 
       - name: Setup original code
         shell: bash
-        working-directory: ${{ github.workspace }}/prior-commit
+        working-directory: ${{ runner.temp }}/prior-commit
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.old_action_dir }}" ]]; then
@@ -171,7 +175,7 @@ jobs:
 
       - name: Setup new code
         shell: bash
-        working-directory: ${{ github.workspace }}/current-commit
+        working-directory: ${{ runner.temp }}/current-commit
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
@@ -203,7 +207,7 @@ jobs:
         id: malcontent
         shell: bash
         run: |
-          docker run --rm -v ${{ github.workspace }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
+          docker run --rm -v ${{ runner.temp }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
 
       - name: Add comment if results are empty
         shell: bash
