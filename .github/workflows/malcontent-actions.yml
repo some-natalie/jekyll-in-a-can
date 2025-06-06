@@ -183,7 +183,7 @@ jobs:
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
-          if $type==docker; then
+          if [[ $type==docker ]]; then
             image=$(yq '.runs.image' action.yml)
             if [[ $image == "Dockerfile" ]]; then
               echo "This Action uses a Dockerfile, building it..."
@@ -207,11 +207,11 @@ jobs:
         id: malcontent
         shell: bash
         run: |
-          mkdir -p ${{ github.workspace }}/malcontent
-          mv prior-commit ${{ github.workspace }}/malcontent/prior-commit
-          mv current-commit ${{ github.workspace }}/malcontent/current-commit
-          chown -R 65532:65532 ${{ github.workspace }}/malcontent
-          docker run --rm -v ${{ github.workspace }}/malcontent:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
+          mkdir -p ${{ runner.temp }}/malcontent
+          mv prior-commit ${{ runner.temp }}/malcontent/prior-commit
+          mv current-commit ${{ runner.temp }}/malcontent/current-commit
+          chown -R 65532:65532 ${{ runner.temp }}/malcontent
+          docker run --rm -v ${{ runner.temp }}/malcontent:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
 
       - name: Add comment if results are empty
         shell: bash
@@ -225,7 +225,7 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          path: malcontent-results.md
+          path: ${{ runner.temp }}/malcontent/malcontent-results.md
           name: malcontent-results
 
   comment:
