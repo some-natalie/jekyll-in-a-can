@@ -61,10 +61,10 @@ jobs:
           # if there's more than one / in the repo, capture the directory structure
           if [[ $(echo "$OLD_USE" | grep -o '/' | wc -l) -gt 1 ]]; then
             OLD_ACTION_ORG="${OLD_USE%%/*}" # everything before the first /
-            OLD_ACTION_REPO="${OLD_USE#*/}"         # remove the first /
+            OLD_ACTION_REPO="${OLD_USE#*/}" # remove the first /
             OLD_ACTION_REPO="${OLD_ACTION_REPO%%/*}" # everything before the next /
-            OLD_ACTION_DIR="${OLD_USE#*/}"   # everything after the first /
-            OLD_ACTION_DIR="${OLD_ACTION_DIR#*/}"   # do it again
+            OLD_ACTION_DIR="${OLD_USE#*/}" # everything after the first /
+            OLD_ACTION_DIR="${OLD_ACTION_DIR#*/}" # do it again
             OLD_ACTION_DIR="${OLD_ACTION_DIR%@*}" # remove anything after the @
           else
             OLD_ACTION_ORG="${OLD_USE%%/*}"
@@ -82,10 +82,10 @@ jobs:
           # if there's more than one / in the repo, capture the directory structure
           if [[ $(echo "$NEW_USE" | grep -o '/' | wc -l) -gt 1 ]]; then
             NEW_ACTION_ORG="${NEW_USE%%/*}" # everything before the first /
-            NEW_ACTION_REPO="${NEW_USE#*/}"         # remove the first /
+            NEW_ACTION_REPO="${NEW_USE#*/}" # remove the first /
             NEW_ACTION_REPO="${NEW_ACTION_REPO%%/*}" # everything before the next /
-            NEW_ACTION_DIR="${NEW_USE#*/}"   # everything after the first /
-            NEW_ACTION_DIR="${NEW_ACTION_DIR#*/}"   # do it again
+            NEW_ACTION_DIR="${NEW_USE#*/}" # everything after the first /
+            NEW_ACTION_DIR="${NEW_ACTION_DIR#*/}" # do it again
             NEW_ACTION_DIR="${NEW_ACTION_DIR%@*}" # remove anything after the @
           else
             NEW_ACTION_ORG="${NEW_USE%%/*}"
@@ -139,8 +139,8 @@ jobs:
         working-directory: ${{ github.workspace }}/prior-commit
         run: |
           # change to the Action directory if specified
-          if [[ -n "${{ needs.extract-action-repo.outputs.old_action_dir }}" ]]; then
-            cd "${{ needs.extract-action-repo.outputs.old_action_dir }}"
+          if [[ -n ${{ needs.extract-action-repo.outputs.old_action_dir }} ]]; then
+            cd ${{ needs.extract-action-repo.outputs.old_action_dir }}
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
@@ -178,8 +178,8 @@ jobs:
         working-directory: ${{ github.workspace }}/current-commit
         run: |
           # change to the Action directory if specified
-          if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
-            cd "${{ needs.extract-action-repo.outputs.new_action_dir }}"
+          if [[ -n ${{ needs.extract-action-repo.outputs.new_action_dir }} ]]; then
+            cd ${{ needs.extract-action-repo.outputs.new_action_dir }}
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
