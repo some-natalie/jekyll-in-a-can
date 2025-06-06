@@ -207,11 +207,7 @@ jobs:
         id: malcontent
         shell: bash
         run: |
-          mkdir -p ${{ runner.temp }}/malcontent
-          mv prior-commit ${{ runner.temp }}/malcontent/prior-commit
-          mv current-commit ${{ runner.temp }}/malcontent/current-commit
-          chown -R 65532:65532 ${{ runner.temp }}/malcontent
-          docker run --rm -v ${{ runner.temp }}/malcontent:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
+          docker run --rm --user 0 -v ${{ github.workspace }}/malcontent:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
 
       - name: Add comment if results are empty
         shell: bash
@@ -225,7 +221,7 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          path: ${{ runner.temp }}/malcontent/malcontent-results.md
+          path: ${{ github.workspace }}/malcontent/malcontent-results.md
           name: malcontent-results
 
   comment:
