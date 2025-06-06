@@ -143,6 +143,10 @@ jobs:
             echo "changing directory to ${{ needs.extract-action-repo.outputs.new_action_dir }}"
             cd "${{ needs.extract-action-repo.outputs.old_action_dir }}" || true
           fi
+          # rename action.yml to action.yaml if it exists
+          if [[ -f action.yaml ]]; then
+            mv action.yaml action.yml
+          fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
           if $type==docker; then
@@ -182,6 +186,10 @@ jobs:
           if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
             echo "changing directory to ${{ needs.extract-action-repo.outputs.new_action_dir }}"
             cd "${{ needs.extract-action-repo.outputs.new_action_dir }}" || true
+          fi
+          # rename action.yml to action.yaml if it exists
+          if [[ -f action.yaml ]]; then
+            mv action.yaml action.yml
           fi
           # figure out type of Action
           type=$(yq '.runs.using' action.yml)
