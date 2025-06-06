@@ -140,6 +140,7 @@ jobs:
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.old_action_dir }}" ]]; then
+            echo "changing directory to ${{ needs.extract-action-repo.outputs.new_action_dir }}"
             cd "${{ needs.extract-action-repo.outputs.old_action_dir }}" || true
           fi
           # figure out type of Action
@@ -179,6 +180,7 @@ jobs:
         run: |
           # change to the Action directory if specified
           if [[ -n "${{ needs.extract-action-repo.outputs.new_action_dir }}" ]]; then
+            echo "changing directory to ${{ needs.extract-action-repo.outputs.new_action_dir }}"
             cd "${{ needs.extract-action-repo.outputs.new_action_dir }}" || true
           fi
           # figure out type of Action
