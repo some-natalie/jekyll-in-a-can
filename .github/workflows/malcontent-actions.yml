@@ -218,7 +218,9 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ env.OLD_ACTION_TYPE }}" == "docker" && "${{ env.NEW_ACTION_TYPE }}" == "docker" ]]; then
-            docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock --user 0 -v ${{ github.workspace }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff -i ${{ env.OLD_ACTION_IMAGE}} ${{ env.NEW_ACTION_IMAGE }} >> malcontent-results.md
+            echo "Original image ${{ env.OLD_ACTION_IMAGE }}"
+            echo "Proposed new image ${{ env.NEW_ACTION_IMAGE }}"
+            docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock --user 0 -v ${{ github.workspace }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown diff -i ${{ env.OLD_ACTION_IMAGE}} ${{ env.NEW_ACTION_IMAGE }} >> malcontent-results.md
           else
             docker run --rm --user 0 -v ${{ github.workspace }}:/tmp cgr.dev/chainguard/malcontent:latest --format=markdown --min-file-risk=high diff /tmp/prior-commit /tmp/current-commit >> malcontent-results.md
           fi
