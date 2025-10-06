@@ -30,7 +30,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Close stale pull requests
-        uses: actions/stale@3a9db7e6a41a89f618792c92c0e97cc736e1b13f # v10.0.0
+        uses: actions/stale@5f858e3efba33a5ca4407a664cc011ad407f2008 # v10.1.0
         with:
           stale-pr-message: "This PR is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 2 weeks."
           close-pr-message: "This PR was closed because it has been stalled for 2 weeks with no activity."
