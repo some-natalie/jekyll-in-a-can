@@ -2,6 +2,9 @@
 
 🧪🥫 - it's Jekyll in a container
 
+> [!WARNING]  
+> 🎄 Merry Christmas! 🎄  Ruby 4.0.0 was released and it's not quite compatible with Jekyll yet.  Use `latest-ruby3` for the last good build using Ruby 3.4.
+
 ## usage
 
 change directories into your project's root directory, then run it
