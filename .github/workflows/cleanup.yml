@@ -8,12 +8,16 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # let an in-flight cleanup finish deleting
+
 jobs:
   cleanup:
     name: Repo cleanup 🧹
     runs-on: ubuntu-latest
     permissions:
-      packages: write
+      packages: write # to delete old untagged container images
     steps:
       - name: Delete untagged container images older than 2 months
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
@@ -27,7 +31,7 @@ jobs:
     name: Destalinate!
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
+      pull-requests: write # to label and close stale pull requests
     steps:
       - name: Close stale pull requests
         uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0

@@ -10,8 +10,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # never interrupt a release build mid-push
+
 jobs:
   build-jekyll:
+    name: Build and push the container
     runs-on: ubuntu-latest # use the GitHub hosted runners
     permissions:
       packages: write # for uploading the finished container
